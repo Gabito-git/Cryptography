@@ -1,0 +1,49 @@
+.App{
+  padding: 5rem 7rem 0 7rem;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 791px) {
+  .App {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 5rem;  
+  }
+}
+
+.card{
+  background-color: white;
+  box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.2)  ;
+  border-radius: 5px;
+  padding: 6rem 4rem 4rem 4rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 791px) {
+  .card {
+    flex: 1;
+  }
+}
+
+.card__title{
+  font-size: 3.2rem;
+  margin-bottom: 3.2rem;
+}
+
+.card__label{
+  display: block;
+  font-size: 1.3rem;
+}
+
+.card input{
+  border: none;
+  width: 100%;
+  background-color: #fdfdfe;
+  padding: 1rem;
+}
+
+.card__input-field{
+  border: 1px solid lightgray;
+  margin-bottom: 2rem;
+}
