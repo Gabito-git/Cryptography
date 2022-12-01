@@ -7,10 +7,9 @@ const { toHex } = require("ethereum-cryptography/utils");
 const generateAccount = require('../helpers/generateAccounts');
 
 const router = Router();
-
 const balances = {};
-
 const values = [100, 75, 50]
+const id = 0;
         
 values.forEach( value => {
     const address = generateAccount();
@@ -27,8 +26,13 @@ router.post('/send', async( req, res ) => {
     const { signature, recoveryBit, recipient, amount } = req.body;
     const sig = new Uint8Array(Array.from(Object.values( signature )));
 
+    const message = {
+        recipient,
+        amount,
+        id
+    }
 
-    const bytes = utf8ToBytes( amount );
+    const bytes = utf8ToBytes( JSON.stringify(message) );
     const hashedMessage = keccak256( bytes );
     const recovered = secp.recoverPublicKey(hashedMessage, sig, recoveryBit);
 
@@ -44,6 +48,7 @@ router.post('/send', async( req, res ) => {
 
     balances[ sender ] -= +amount;
     balances[ recipient ] += +amount;
+    id++;
     res.status(200).json({balance: balances[sender]});
 })
 

@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import * as secp from "ethereum-cryptography/secp256k1";
 import { keccak256 }  from "ethereum-cryptography/keccak";
 import { utf8ToBytes }  from "ethereum-cryptography/utils";
@@ -11,11 +11,19 @@ const Transaction = () => {
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');
   const {dispatch, state:{ privateKey } } = useContext(TransactionContext);
+
+  const id = useRef(0);
   
   const onSubmit = async(e) => {
     e.preventDefault();
 
-    const bytes = utf8ToBytes( amount );
+    const message = {
+      recipient,
+      amount,
+      id: id.current
+    }
+
+    const bytes = utf8ToBytes( JSON.stringify(message) );
     const hash  = keccak256( bytes );
 
     const [ sig, recoveryBit ] = await secp.sign(hash, privateKey, {recovered: true} );
@@ -33,7 +41,7 @@ const Transaction = () => {
 
     const {balance} = await resp.json();
     dispatch({type: 'SET_BALANCE', payload:balance});
-
+    id.current++;
   }
 
   return (
